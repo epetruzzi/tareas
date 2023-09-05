@@ -19,4 +19,10 @@ password: new FormControl ('', [Validators.required])
   ngOnInit() {
   }
 
+submit(){
+  if(this.form.valid){
+    console.log(this.form.value)
+  }
+}
+
 }
