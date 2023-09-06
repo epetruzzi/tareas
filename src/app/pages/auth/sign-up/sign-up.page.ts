@@ -14,60 +14,61 @@ import { CustomValidators } from 'src/app/utils/custom-validators';
 })
 export class SignUpPage implements OnInit {
 
-  form = new FormGroup ({
-    name: new FormControl ('', [Validators.required, Validators.minLength(4)]),
-    email: new FormControl ('', [Validators.required, Validators.email]),
-    password: new FormControl ('', [Validators.required]),
-    confirmPassword: new FormControl ('')
-    }
-    );
-    
-      constructor(
-        private firebaseSvc: FirebaseService,
-        private utilsSvc: UtilsService
-        ) { }
-    
-      ngOnInit() {
-        this.confirmPasswordValidators()
-      }
-    
-      confirmPasswordValidators(){
-        this.form.controls.confirmPassword.setValidators([
-          Validators.required,
-          CustomValidators.matchValues(this.form.controls.password)
-        ])
+  form = new FormGroup({
+    name: new FormControl('', [Validators.required, Validators.minLength(4)]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required]),
+    confirmPassword: new FormControl('')
+  }
+  );
 
-        this.form.controls.confirmPassword.updateValueAndValidity();
-      }
+  constructor(
+    private firebaseSvc: FirebaseService,
+    private utilsSvc: UtilsService
+  ) { }
 
-    submit(){
-      if(this.form.valid){
+  ngOnInit() {
+    this.confirmPasswordValidators()
+  }
 
-        this.utilsSvc.presentLoading({message: 'Registrando...'});
+  confirmPasswordValidators() {
+    this.form.controls.confirmPassword.setValidators([
+      Validators.required,
+      CustomValidators.matchValues(this.form.controls.password)
+    ])
 
-        this.firebaseSvc.signUp(this.form.value as User).then(async res => {
-          console.log(res);
+    this.form.controls.confirmPassword.updateValueAndValidity();
+  }
 
-          await this.firebaseSvc.updateUser({displayName: this.form.value.name})
+  submit() {
+    if (this.form.valid) {
 
-          let user: User = {
-            uid: res.user.uid,
-            name: res.user.displayName,
-            email: res.user.email,
-          }
+      this.utilsSvc.presentLoading({ message: 'Registrando...' })
 
-          this.utilsSvc.setElementInLocalStorage('user', user);
-          this.utilsSvc.routerLink('/tabs/home');
+      this.firebaseSvc.signUp(this.form.value as User).then(async res => {
+        console.log(res);
 
-          this.utilsSvc.dismissLoading();
+        await this.firebaseSvc.updateUser({ displayName: this.form.value.name })
 
-          this.utilsSvc.presentToast({
-            message:'Te damos la bienvenida $(user.name)',
-            duration: 1500,
-            color: 'primary',
-            icon: 'person-outline'
-          })
+        let user: User = {
+          uid: res.user.uid,
+          name: res.user.displayName,
+          email: res.user.email,
+        }
 
+        this.utilsSvc.setElementInLocalStorage('user', user);
+
+        this.utilsSvc.routerLink('/tabs/home');
+
+        this.utilsSvc.dismissLoading();
+
+        this.utilsSvc.presentToast({
+          message: 'Bienvenido ${user.name}',
+          duration: 1500,
+          color: 'primary',
+          icon: 'person-outline'
+        })
+        this.form.reset();
       }, error => {
         this.utilsSvc.dismissLoading();
 
@@ -78,8 +79,8 @@ export class SignUpPage implements OnInit {
           icon: 'alert-circle-outline'
         })
       })
-      }
     }
-    
+  }
+
 
 }

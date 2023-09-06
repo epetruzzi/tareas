@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoadingController, LoadingOptions, ToastController, ToastOptions } from '@ionic/angular';
+import { AlertController, AlertOptions, LoadingController, LoadingOptions, ModalController, ModalOptions, ToastController, ToastOptions } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -10,15 +10,17 @@ export class UtilsService {
   constructor(
     private loadingController: LoadingController,
     private router: Router,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private alertController: AlertController,
+    private modalController: ModalController
     ) { }
 
     //#########LOADING#######
 
     //   presents
 
-    async presentLoading(opt?: LoadingOptions) {
-      const loading = await this.loadingController.create(opt);
+    async presentLoading(opts?: LoadingOptions) {
+      const loading = await this.loadingController.create(opts);
        await loading.present();
     }
 
@@ -42,6 +44,32 @@ export class UtilsService {
     }
 
     routerLink(url: string){
-      return this.router.navigateByUrl(url)
+      return this.router.navigateByUrl(url);
     }
+
+    async presentAlert(opts: AlertOptions) {
+      const alert = await this.alertController.create(opts);
+
+      await alert.present();
+    }
+
+    //---- Modal
+
+    async presentModal(opts: ModalOptions) {
+      const modal = await this.modalController.create(opts);
+
+      await modal.present();
+      const {data} = await modal.onWillDismiss();
+      if(data){
+        return data;
+      }
+    }
+
+//--- dismiss
+
+dismissModal(data?: any){
+  this.modalController.dismiss(data);
+}
+
+
 }

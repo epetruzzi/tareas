@@ -9,23 +9,23 @@ import { AppRoutingModule } from './app-routing.module';
 
 //=========== Firebase ===========
 
-import {AngularFireModule} from '@angular/fire/compat';
+import { AngularFireModule } from '@angular/fire/compat';
 import { environment } from 'src/environments/environment';
-import {AngularFireAuthModule} from '@angular/fire/compat/auth';
-import {AngularFirestoreModule} from '@angular/fire/compat/firestore';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 
 
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, 
-    IonicModule.forRoot({mode: 'md'}), 
-    AppRoutingModule, 
+  imports: [BrowserModule,
+    IonicModule.forRoot({ mode: 'md' }),
+    AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
-  AngularFireAuthModule,
-  AngularFirestoreModule
-],
+    AngularFireAuthModule,
+    AngularFirestoreModule
+  ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
