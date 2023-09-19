@@ -40,10 +40,10 @@ export class SignUpPage implements OnInit {
     this.form.controls.confirmPassword.updateValueAndValidity();
   }
 
-  submit() {
+  async submit() {
     if (this.form.valid) {
 
-      this.utilsSvc.presentLoading({ message: 'Registrando...' })
+       this.utilsSvc.presentLoading({ message: 'Registrando...' })
 
       this.firebaseSvc.signUp(this.form.value as User).then(async res => {
         console.log(res);
